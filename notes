@@ -1,0 +1,219 @@
+Database_schema
+Table => User
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+Table => Modules
+CREATE TABLE modules (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    parent_id INT NULL,
+    user_id INT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_modules_parent
+        FOREIGN KEY (parent_id)
+        REFERENCES modules(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_modules_user
+        FOREIGN KEY (user_id)
+        REFERENCES Users(id)
+        ON DELETE SET NULL
+);
+
+Table => Log_times
+CREATE TABLE Log_times (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    module_id INT NOT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    Subject VARCHAR(255) NOT NULL,
+    Notes TEXT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    CONSTRAINT fk_logtimes_module
+        FOREIGN KEY (module_id)
+        REFERENCES modules(id)
+        ON DELETE CASCADE
+);
+
+Table => calender_remainders
+CREATE TABLE calender_remainders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    reminder_time DATETIME NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_remainders_user
+        FOREIGN KEY (user_id)
+        REFERENCES Users(id)
+        ON DELETE CASCADE
+);
+
+
+.NET create backend
+dotnet new webapi -n TimeTracker.API
+dotnet clean
+dotnet nuget locals all --clear
+dotnet add package Swashbuckle.AspNetCore --version 6.5.0
+dotnet add package Microsoft.EntityFrameworkCore
+dotnet add package Pomelo.EntityFrameworkCore.MySql
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Swashbuckle.AspNetCore --version 6.5.0
+
+.NET package
+dotnet add package Swashbuckle.AspNetCore
+-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+update Program.cs 
+-------------------------------------------------------------------------------
+using Microsoft.OpenApi.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TimeTracker API", Version = "v1" });
+});
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TimeTracker API V1");
+});
+
+app.MapControllers();
+app.Run();
+
+-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+update appsettings.json
+-------------------------------------------------------------------------------
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=TimeTrackerDB;User=root;Password=yourpassword;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
+}
+
+------------------------------------------------------------------------------
+Create Models folder 
+------------------------------------------------------------------------------
+using System.Collections.Generic;
+--  using is like importing a namespace so you can use its classes without writing the full name every time.
+-- It saves you from typing the full path repeatedly.
+-- Without using, you would have to write:
+-- TimeTracker.API.Models.User user = new TimeTracker.API.Models.User();
+namespace TimeTracker.API.Models;
+-- A namespace is like a folder or container for your classes, structs, enums, etc.
+-- It helps avoid naming conflicts when you have multiple classes with the same name in a large project.
+-- You can think of it as grouping related classes together
+eg:-
+Namespace = a cabinet in your office labeled “Models” or “Controllers”.
+Using = taking a drawer from that cabinet to use it without opening the whole cabinet every time.
+
+-------------------------------------------------------------------------------
+DbContext class
+-------------------------------------------------------------------------------
+-- DbContext is a class provided by EF Core.
+-- It represents a session with the database — like a bridge between your C# code and your MySQL database.
+-- Through it, you can query, insert, update, delete data without writing raw SQL
+
+------------------------------------------------------------------------------
+Services, Controllers, DI(Dependency Injection)
+-------------------------------------------------------------------------------
+Service interface + implementation → clean separation of business logic.
+--A service is a class that contains business logic — the rules about how your app behaves.
+-- a) Interface (IUserService)
+-- Defines a contract: “Anything that implements me must provide these methods.”
+-- No implementation details, just method signatures.
+---- Benefits:
+---- Loose coupling → Controllers don’t care how it’s done, just that it works.
+---- Easier to swap implementations → e.g., replace UserService with MockUserService for testing.
+---- Improves testability → you can inject a fake service in unit tests.
+-- b) Implementation (UserService) ==> (Concrete class)
+-- Actually implements the logic: talking to DbContext, querying database, adding records.
+-- Controller doesn’t need to know how it works, it just calls the service.
+
+--======== Suppose later you decide to store users in a file instead of MySQL:
+-- Controller code does NOT change.
+-- You just swap the service in Program.cs:
+'Use abstract classes when:
+✅ You want shared base logic
+✅ You want to force child classes to implement some methods
+✅ You are modeling inheritance, not behavior contracts'
+
+-- An interface defines what a class must do, 
+-- an abstract class provides shared base behavior with optional implementation, and 
+-- a concrete class provides the full working logic.
+
+Dependency Injection → controller doesn’t create the service manually, it’s injected.
+
+Controller → exposes CRUD endpoints:
+-- GET /api/user → get all users
+-- GET /api/user/{id} → get single user
+-- POST /api/user → create user
+-- PUT /api/user/{id} → update user
+-- DELETE /api/user/{id} → delete user
+
+
+-- How SOLID principles are applied here:
+-----------------------------------------
+S — Single Responsibility Principle (SRP)
+-----------------------------------------
+One class = one reason to change.
+Each service/controller should do only one job.
+-- Example:
+TimeEntryService → business logic
+TimeEntryController → HTTP requests
+❌ Don’t mix DB + HTTP + logic in one class
+
+-----------------------------------------
+O — Open/Closed Principle (OCP)
+-----------------------------------------
+Open for extension, closed for modification.
+Add new behavior without changing existing code.
+-- Example:
+Add ExportToCSVService without touching TimeEntryService.
+
+-----------------------------------------
+L — Liskov Substitution Principle (LSP)
+-----------------------------------------
+Child class should replace parent without breaking behavior.
+-- Example:
+If ITimeReportService is used,
+WeeklyReportService or MonthlyReportService should work the same way.
+
+-----------------------------------------
+I — Interface Segregation Principle (ISP)
+-----------------------------------------
+Many small interfaces > one big interface.
+-- Example:
+❌ ITimeService with 10 methods
+✅ ITimeCreateService, ITimeReadService
+-- Clients depend only on what they need.
+
+-----------------------------------------
+D — Dependency Inversion Principle (DIP)
+-----------------------------------------
+Depend on abstractions, not concrete classes.
+-- Example:
+Controller depends on ITimeEntryService,
+NOT directly on TimeEntryService.
+
+
+`wanna check unit testing`
