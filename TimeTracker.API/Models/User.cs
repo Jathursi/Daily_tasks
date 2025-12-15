@@ -11,10 +11,10 @@ namespace TimeTracker.API.Models;
 public class User
 {
     public int Id { get; set; }
-    public string Name { get; set; } = string.Empty;
+    public string name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    public string PasswordHash { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public string password_hash { get; set; } = string.Empty;
+    public DateTime created_at { get; set; } = DateTime.Now;
     public List<Module> Modules { get; set; } = new();
     public List<CalendarRemainder> CalendarRemainders { get; set; } = new();
 }

@@ -35,9 +35,9 @@ public class UserService : IUserService
         var existingUser = await _context.Users.FindAsync(id);
         if (existingUser == null) return null;
 
-        existingUser.Name = user.Name;
+        existingUser.name = user.name;
         existingUser.Email = user.Email;
-        existingUser.PasswordHash = user.PasswordHash;
+        existingUser.password_hash = user.password_hash;
 
         await _context.SaveChangesAsync();
         return existingUser;

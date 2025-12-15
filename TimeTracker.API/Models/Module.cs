@@ -8,7 +8,7 @@ public class Module
     public string Name { get; set; } = string.Empty;
     public int? ParentId { get; set; }
     public int? UserId { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime created_at { get; set; } = DateTime.Now;
 
     // Navigation properties
     public Module? Parent { get; set; }

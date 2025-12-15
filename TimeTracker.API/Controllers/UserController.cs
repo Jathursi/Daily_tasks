@@ -19,8 +19,8 @@ public class UserController : ControllerBase
     public async Task<IActionResult> GetAll()
     {
         var users = await _userService.GetAllUsersAsync();
-        // return Ok(users);
-        return Ok(new [] { "User1", "User2" });
+        return Ok(users);
+        // return Ok(new [] { "User1", "User2" });
     }
 
     [HttpGet("{id}")]
