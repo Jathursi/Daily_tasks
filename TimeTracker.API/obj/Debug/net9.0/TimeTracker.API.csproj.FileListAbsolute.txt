@@ -38,3 +38,4 @@ C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Ab
 C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\MySqlConnector.dll
 C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Daily_tasks\TimeTracker.API\obj\Debug\net9.0\TimeTracker.API.sourcelink.json

@@ -70,28 +70,36 @@ dotnet add package Swashbuckle.AspNetCore
 -------------------------------------------------------------------------------
 update Program.cs 
 -------------------------------------------------------------------------------
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using TimeTracker.API.Data;
+using TimeTracker.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Database connection (MySQL)
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<TimeTrackerContext>(options =>
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// Register services
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IModuleService, ModuleService>();
+builder.Services.AddScoped<ILogTimeService, LogTimeService>();
+builder.Services.AddScoped<ICalenderRemainderService, CalenderRemainderService>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TimeTracker API", Version = "v1" });
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TimeTracker API V1");
-});
-
 app.MapControllers();
+
 app.Run();
+
 
 -----------------------------------------------------------------------------
 -------------------------------------------------------------------------------
@@ -215,5 +223,13 @@ Depend on abstractions, not concrete classes.
 Controller depends on ITimeEntryService,
 NOT directly on TimeEntryService.
 
+
+
+`Why DbContext is needed (simple explanation)
+Without DbContext	With DbContext
+Manual SQL	        LINQ queries
+Hard to test    	Easy unit testing
+Tight coupling  	Clean DI
+No tracking	        Change tracking`
 
 `wanna check unit testing`

@@ -11,6 +11,9 @@ builder.Services.AddDbContext<TimeTrackerContext>(options =>
 
 // Register services
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IModuleService, ModuleService>();
+builder.Services.AddScoped<ILogTimeService, LogTimeService>();
+builder.Services.AddScoped<ICalenderRemainderService, CalenderRemainderService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
