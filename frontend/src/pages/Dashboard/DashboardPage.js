@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 function DashboardPage() {
   return (
     <div className="bg-background-dark text-slate-900 dark:text-white font-display overflow-x-hidden min-h-screen flex flex-col">
-      <div className="w-full flex justify-center sticky top-0 z-50 pt-5 px-4 mb-8">
+      {/* <div className="w-full flex justify-center sticky top-0 z-50 pt-5 px-4 mb-8">
         <header className="flex items-center justify-between whitespace-nowrap border border-surface-border bg-surface-dark/90 backdrop-blur-md px-6 py-3 rounded-full w-full max-w-[1200px] shadow-lg">
           <div className="flex items-center gap-3 text-white">
             <div className="size-6 text-primary">
@@ -32,13 +32,13 @@ function DashboardPage() {
             </button>
             <div className="h-6 w-px bg-surface-border mx-1"></div>
             <button className="flex items-center gap-2 group">
-              <div className="w-8 h-8 rounded-full border border-surface-border bg-gray-600 bg-cover bg-center" style={{backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAyx9K-7NH3UkWNf1BwA5K2I8nvnhA3pzxhDhYTFqGGkMFGoKluL9ByRJx2qV3zLiA0GcgNZ5REPCP-L3eR9lfMXK2EVL2SLAysxJOUDRLjjb_XdyX1oujdNFZJ_6B0BoPkmIeOUapfVQcP1-5ehB9beVa_ma7dnKSU4iiqCRlSAEzwOB0vhllSbyEoFspYJVIE0SSRQImmB0r0Rc2UaKmg5TDdD9x-Z75O1c91nsbI1zMr3fOHct4o3TjZQlMkerswBejFRbShb9g')"}}></div>
+              <div className="w-8 h-8 rounded-full border border-surface-border bg-gray-600 bg-cover bg-center" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuAyx9K-7NH3UkWNf1BwA5K2I8nvnhA3pzxhDhYTFqGGkMFGoKluL9ByRJx2qV3zLiA0GcgNZ5REPCP-L3eR9lfMXK2EVL2SLAysxJOUDRLjjb_XdyX1oujdNFZJ_6B0BoPkmIeOUapfVQcP1-5ehB9beVa_ma7dnKSU4iiqCRlSAEzwOB0vhllSbyEoFspYJVIE0SSRQImmB0r0Rc2UaKmg5TDdD9x-Z75O1c91nsbI1zMr3fOHct4o3TjZQlMkerswBejFRbShb9g')" }}></div>
               <span className="text-sm font-medium text-white hidden sm:block group-hover:text-primary transition-colors">Alex M.</span>
               <span className="material-symbols-outlined text-gray-400 text-sm hidden sm:block">expand_more</span>
             </button>
           </div>
         </header>
-      </div>
+      </div> */}
       <main className="w-full max-w-[1200px] mx-auto px-4 pb-12 flex-grow">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
           <div>
@@ -75,7 +75,7 @@ function DashboardPage() {
               <p className="text-gray-400 text-xs font-bold uppercase tracking-wider mb-1">Weekly Goal</p>
               <h3 className="text-2xl font-bold text-white">32h / 40h</h3>
               <div className="w-full bg-background-dark h-1.5 rounded-full mt-3 overflow-hidden">
-                <div className="bg-primary h-full rounded-full" style={{width: "80%"}}></div>
+                <div className="bg-primary h-full rounded-full" style={{ width: "80%" }}></div>
               </div>
             </div>
             <div className="w-10 h-10 rounded-full bg-surface-border flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform">
@@ -220,7 +220,7 @@ function DashboardPage() {
                     <span className="text-primary font-bold">75%</span>
                   </div>
                   <div className="w-full bg-background-dark h-2 rounded-full overflow-hidden">
-                    <div className="bg-gradient-to-r from-primary to-green-300 h-full rounded-full" style={{width: "75%"}}></div>
+                    <div className="bg-gradient-to-r from-primary to-green-300 h-full rounded-full" style={{ width: "75%" }}></div>
                   </div>
                   <p className="text-gray-500 text-xs mt-1">3 modules remaining</p>
                 </div>
@@ -230,7 +230,7 @@ function DashboardPage() {
                     <span className="text-blue-400 font-bold">42%</span>
                   </div>
                   <div className="w-full bg-background-dark h-2 rounded-full overflow-hidden">
-                    <div className="bg-blue-400 h-full rounded-full" style={{width: "42%"}}></div>
+                    <div className="bg-blue-400 h-full rounded-full" style={{ width: "42%" }}></div>
                   </div>
                   <p className="text-gray-500 text-xs mt-1">210 / 500 pages read</p>
                 </div>
@@ -292,7 +292,7 @@ function DashboardPage() {
           </div>
         </div>
       </main>
-      <footer className="w-full border-t border-surface-border bg-surface-dark py-6 mt-auto">
+      {/* <footer className="w-full border-t border-surface-border bg-surface-dark py-6 mt-auto">
         <div className="w-full max-w-[1200px] mx-auto px-4 md:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-gray-500 text-xs">© 2024 StudyTime Inc.</p>
           <div className="flex gap-6 text-xs font-medium text-gray-400">
@@ -301,7 +301,7 @@ function DashboardPage() {
             <a className="hover:text-primary transition-colors" href="#">Feedback</a>
           </div>
         </div>
-      </footer>
+      </footer> */}
 
     </div>
   )
