@@ -1,47 +1,89 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-function RegisterPage() {
+import React, { useState } from 'react';
+import { register } from '../../services/authService';
+import { useNavigate } from 'react-router-dom';
+
+const RegisterPage = () => {
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [Email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
-    e.preventDefault();
-    // TODO: Connect to backend API
-    console.log({ name, email, password });
-    navigate('/login'); // Navigate to login after registration
+  const validatePassword = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    if (password.length < minLength) {
+      return "Password must be at least 8 characters long.";
+    }
+    if (!hasUpperCase) {
+      return "Password must contain at least one uppercase letter.";
+    }
+    if (!hasLowerCase) {
+      return "Password must contain at least one lowercase letter.";
+    }
+    if (!hasNumber) {
+      return "Password must contain at least one number.";
+    }
+    if (!hasSpecialChar) {
+      return "Password must contain at least one special character (!@#$%^&*).";
+    }
+
+    return null;
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const error = validatePassword(password);
+    if (error) {
+      // alert(error); 
+      setError(error);
+      return;
+    }
+
+    try {
+      const result = await register({ name, Email, password });
+      console.log("Registered:", result);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   return (
     <div>
       <h2>Register</h2>
-      <form onSubmit={handleRegister}>
+      <form onSubmit={handleSubmit}>
         <input
+          type="text"
           placeholder="Name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={e => setName(e.target.value)}
+          required
         />
         <input
           type="email"
           placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={Email}
+          onChange={e => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
+          required
         />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
         <button type="submit">Register</button>
       </form>
-      <p>
-        Already have an account? <Link to="/login">Login here</Link>
-      </p>
     </div>
   );
-}
+};
 
-export default RegisterPage
+export default RegisterPage;

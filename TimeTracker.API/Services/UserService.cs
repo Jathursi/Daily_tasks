@@ -52,4 +52,20 @@ public class UserService : IUserService
         await _context.SaveChangesAsync();
         return true;
     }
+    public async Task<User?> ValidateUserAsync(string email, string password)
+    {
+        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password)) return null;
+
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+        if (user == null) return null;
+
+        return BCrypt.Net.BCrypt.Verify(password, user.password_hash) ? user : null;
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        var normalizedEmail = email.Trim().ToLowerInvariant();
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
+    }
 }

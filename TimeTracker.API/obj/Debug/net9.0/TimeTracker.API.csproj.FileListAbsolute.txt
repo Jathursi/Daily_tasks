@@ -39,3 +39,12 @@ C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Re
 C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\MySqlConnector.dll
 C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
 C:\Daily_tasks\TimeTracker.API\obj\Debug\net9.0\TimeTracker.API.sourcelink.json
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Daily_tasks\TimeTracker.API\bin\Debug\net9.0\BCrypt.Net-Next.dll

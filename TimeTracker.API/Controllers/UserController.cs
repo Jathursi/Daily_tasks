@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.API.Models;
 using TimeTracker.API.Services;
-
+using BCrypt.Net;
 namespace TimeTracker.API.Controllers;
 
 [ApiController]
@@ -32,11 +32,11 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(User user)
-    {
-        var createdUser = await _userService.CreateUserAsync(user);
-        return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, createdUser);
-    }
+    // public async Task<IActionResult> Create(User user)
+    // {
+    //     var createdUser = await _userService.CreateUserAsync(user);
+    //     return CreatedAtAction(nameof(Get), new { id = createdUser.Id }, createdUser);
+    // }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, User user)
@@ -52,5 +52,28 @@ public class UserController : ControllerBase
         var result = await _userService.DeleteUserAsync(id);
         if (!result) return NotFound();
         return NoContent();
+    }
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] User user)
+    {
+        user.password_hash = BCrypt.Net.BCrypt.HashPassword(user.password_hash);
+        var createdUser = await _userService.CreateUserAsync(user);
+        if (createdUser == null)
+            return BadRequest("User could not be created");
+
+        return Ok(createdUser); // you can return Id, Email or DTO
+    }
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] User user)
+    {
+        var existingUser = await _userService.GetUserByEmailAsync(user.Email);
+        if (existingUser == null)
+            return Unauthorized("Invalid email or password");
+
+        bool isPasswordValid = BCrypt.Net.BCrypt.Verify(user.password_hash, existingUser.password_hash);
+        if (!isPasswordValid)
+            return Unauthorized("Invalid email or password");
+
+        return Ok(existingUser); // you can return a token or user info
     }
 }
