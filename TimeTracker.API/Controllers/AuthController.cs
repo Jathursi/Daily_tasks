@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         var tokenHandler = new JwtSecurityTokenHandler();
         // var key = Encoding.ASCII.GetBytes(_config["Jwt:Key"] ?? "YourSuperSecretKey123!");
         var jwtKey = _config["Jwt:Key"] ?? "ThisIsAReallyLongDevJwtKey_ChangeMe_1234567890!";
-var     key = Encoding.ASCII.GetBytes(jwtKey);
+        var key = Encoding.ASCII.GetBytes(jwtKey);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(new Claim[]
